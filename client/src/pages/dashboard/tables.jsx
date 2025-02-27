@@ -6,18 +6,21 @@ import {
   Typography,
   Avatar,
   Chip,
-  Progress,
+  Button,
 } from "@material-tailwind/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import authorsTableData from "../../data/authors-table-data.js";
 
 export function Tables() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost/opencart/index.php?route=api/allproducts&json")
+    fetch("http://localhost/opencartsite/index.php?route=api/allproducts&json", {
+      method: "GET",
+      credentials: "include",
+    })   
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.shop_products) {
           setProducts(
             data.shop_products.map((item) => ({
@@ -32,8 +35,29 @@ export function Tables() {
           );
         }
       })
-      .catch((error) => console.error("Error fetching products:", error));
+      .catch(() => {
+        console.error("Error fetching products. Using fallback data.");
+        setProducts(
+          authorsTableData.map((item, index) => ({
+            product_id: index + 1,
+            image: item.img,
+            name: item.name,
+            model: item.category,
+            price: item.price.replace("$", ""),
+            quantity: item.sales,
+            status: item.stock,
+          }))
+        );
+      });
   }, []);
+
+  const handleEdit = (id) => {
+    alert(`Edit product ${id}`);
+  };
+
+  const handleDelete = (id) => {
+    setProducts(products.filter((product) => product.product_id !== id));
+  };
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
@@ -47,16 +71,10 @@ export function Tables() {
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
-                {["Product ID", "Image", "Name", "Model", "Price", "Quantity", "Status", ""].map(
+                {["Product ID", "Image", "Name", "Model", "Price", "Quantity", "Status", "Actions"].map(
                   (el) => (
-                    <th
-                      key={el}
-                      className="border-b border-blue-gray-50 py-3 px-5 text-left"
-                    >
-                      <Typography
-                        variant="small"
-                        className="text-[11px] font-bold uppercase text-blue-gray-400"
-                      >
+                    <th key={el} className="border-b border-blue-gray-50 py-3 px-5 text-left">
+                      <Typography variant="small" className="text-[11px] font-bold uppercase text-blue-gray-400">
                         {el}
                       </Typography>
                     </th>
@@ -66,16 +84,11 @@ export function Tables() {
             </thead>
             <tbody>
               {products.map(({ product_id, image, name, model, price, quantity, status }, key) => {
-                const className = `py-3 px-5 ${
-                  key === products.length - 1 ? "" : "border-b border-blue-gray-50"
-                }`;
-
+                const className = `py-3 px-5 ${key === products.length - 1 ? "" : "border-b border-blue-gray-50"}`;
                 return (
                   <tr key={product_id}>
                     <td className={className}>{product_id}</td>
-                    <td className={className}>
-                      <Avatar src={image} alt={name} size="sm" />
-                    </td>
+                    <td className={className}><Avatar src={image} alt={name} size="sm" /></td>
                     <td className={className}>{name}</td>
                     <td className={className}>{model}</td>
                     <td className={className}>${price}</td>
@@ -89,16 +102,14 @@ export function Tables() {
                       />
                     </td>
                     <td className={className}>
-                      <Typography
-                        as="a"
-                        href="#"
-                        className="text-xs font-semibold text-blue-gray-600"
-                      >
-                        <EllipsisVerticalIcon
-                          strokeWidth={2}
-                          className="h-5 w-5 text-inherit"
-                        />
-                      </Typography>
+                      <div className="flex gap-3">
+                        <Button variant="text" color="blue" onClick={() => handleEdit(product_id)}>
+                          <PencilIcon className="h-5 w-5" />
+                        </Button>
+                        <Button variant="text" color="red" onClick={() => handleDelete(product_id)}>
+                          <TrashIcon className="h-5 w-5" />
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 );
