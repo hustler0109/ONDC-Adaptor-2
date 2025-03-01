@@ -1199,10 +1199,10 @@ app.listen(port, () => {
 });
 
 //confirm
-const express = require('express');
+//const express = require('express');
 const bodyParser = require('body-parser');
-const { v4: uuidv4 } = require('uuid'); 
-const axios = require('axios'); 
+//const { v4: uuidv4 } = require('uuid'); 
+//const axios = require('axios'); 
 
 app.use(bodyParser.json());
 
@@ -1309,12 +1309,12 @@ app.listen(port, () => {
 });
 
 //on_confirm
-const express = require('express');
-const bodyParser = require('body-parser');
-const { v4: uuidv4 } = require('uuid');
+//const express = require('express');
+//const bodyParser = require('body-parser');
+//const { v4: uuidv4 } = require('uuid');
 
 
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
 app.post('/on_confirm', (req, res) => {
     const onConfirmResponse = req.body;
@@ -1368,11 +1368,11 @@ app.listen(port, () => {
 
 
 //update
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
+//const express = require('express');
+//const bodyParser = require('body-parser');
+//const axios = require('axios');
 
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
 //const orders = {};
 
@@ -1524,11 +1524,11 @@ app.listen(port, () => {
 });
 
 //on_update
-const express = require('express');
-const bodyParser = require('body-parser');
+//const express = require('express');
+//const bodyParser = require('body-parser');
 
 
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
 //const orders = {};
 
@@ -1601,9 +1601,9 @@ app.listen(port, () => {
 });
 
 //cancel
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
+//const express = require('express');
+//const bodyParser = require('body-parser');
+//const axios = require('axios');
 const redis = require('redis');
 const winston = require('winston');
 
@@ -1796,15 +1796,6 @@ app.listen(port, () => {
 });
 
 //on_cancel
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
-const redis = require('redis');
-const winston = require('winston');
-
-
-app.use(bodyParser.json());
-
 /*const client = redis.createClient();
 client.connect().catch(err => console.error('Redis connection error:', err));
 
